@@ -9,7 +9,7 @@
    Ao publicar uma versão nova, suba o número de VERSAO: isso descarta o
    cache antigo e força o download dos arquivos atualizados.                */
 
-const VERSAO = 'th-1';
+const VERSAO = 'th-2';
 const ARQUIVOS = [
   './',
   './index.html',

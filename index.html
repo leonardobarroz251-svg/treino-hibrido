@@ -225,8 +225,8 @@ h1,h2,h3,.disp{font-family:var(--font-display);font-stretch:85%;font-weight:700;
 }
 .exhead .alvo{font-family:var(--font-display);font-stretch:85%;font-size:15px;font-weight:700;color:var(--acid);flex:none;font-variant-numeric:tabular-nums}
 .exhead + .exhead{border-top:0}
-.biset-link{display:flex;align-items:center;gap:8px;padding:0 13px;height:0;position:relative}
-.biset-link::before{content:'+ SEM PAUSA';position:absolute;left:13px;top:-9px;font-size:8.5px;letter-spacing:.16em;font-weight:800;color:var(--acid-deep);background:var(--surface-2);padding:2px 6px;border-radius:99px;border:1px solid var(--line)}
+.biset-link{display:flex;align-items:center;gap:8px;padding:0 13px;height:9px;position:relative}
+.biset-link::before{content:'+ SEM PAUSA';position:absolute;left:13px;top:-4px;font-size:8.5px;letter-spacing:.16em;font-weight:800;color:var(--acid-deep);background:var(--surface-2);padding:2px 6px;border-radius:99px;border:1px solid var(--line)}
 
 .sets{padding:6px}
 .set{
@@ -273,11 +273,33 @@ h1,h2,h3,.disp{font-family:var(--font-display);font-stretch:85%;font-weight:700;
 .checkonly .lbl b{display:block;font-size:14px;font-weight:650}
 .checkonly .lbl span{font-size:11.5px;color:var(--muted)}
 
+/* ── demonstração em vídeo ───────────────────────────────────────── */
 .vidslot{
-  display:flex;align-items:center;gap:8px;padding:9px 13px;border-top:1px dashed var(--line);
-  font-size:11px;color:var(--dim);
+  display:flex;align-items:center;gap:9px;width:100%;padding:9px 13px;
+  border:0;border-top:1px dashed var(--line);background:var(--surface-2);
+  font:inherit;font-size:11.5px;color:var(--muted);cursor:pointer;text-align:left;transition:.15s;
 }
-.vidslot b{color:var(--muted);font-weight:600}
+.vidslot:hover{background:var(--surface-3);color:var(--text)}
+.vidslot .play{
+  width:22px;height:22px;flex:none;border-radius:50%;background:var(--acid-wash);border:1px solid var(--acid-line);
+  color:var(--acid);display:flex;align-items:center;justify-content:center;font-size:9px;padding-left:2px;
+}
+.vidslot b{color:var(--text);font-weight:600;flex:1}
+.vidslot .seta{color:var(--dim);font-size:10px;transition:transform .2s}
+.vidslot[aria-expanded="true"]{background:var(--acid-wash);color:var(--text)}
+.vidslot[aria-expanded="true"] .seta{transform:rotate(180deg)}
+
+.vidbox{border-top:1px solid var(--line);background:#000}
+.vidbox .frame{position:relative;width:100%;aspect-ratio:16/9;background:#000}
+.vidbox iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+.vidbox .rodape{
+  display:flex;align-items:center;gap:10px;padding:8px 13px;background:var(--surface-2);
+  font-size:10.5px;color:var(--dim);
+}
+.vidbox .rodape a{color:var(--acid);text-decoration:none;font-weight:600;white-space:nowrap}
+.vidbox .rodape a:hover{text-decoration:underline}
+.vidbox .semrede{padding:22px 16px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.5}
+.vidbox .semrede b{display:block;font-family:var(--font-display);font-stretch:85%;text-transform:uppercase;color:var(--text);font-size:15px;margin-bottom:5px}
 
 /* ── rodapé de ação ──────────────────────────────────────────────── */
 .footbar{
@@ -460,47 +482,47 @@ hr.sep{border:0;border-top:1px solid var(--line);margin:22px 0}
       único passo necessário para ligar a fase de vídeos demonstrativos.
    ═══════════════════════════════════════════════════════════════════ */
 
-const AQ_SUP = { id:'mob-superiores', nome:'Aquecimento / mobilidade pré-treino de superiores', reps:'livre', peso:false, series:0, video:null, dica:'' };
+const AQ_SUP = { id:'mob-superiores', nome:'Aquecimento / mobilidade pré-treino de superiores', reps:'livre', peso:false, series:0, video:'YyI_qc8c07w', dica:'' };
 
 const PLANO = {
   musculacao:{
     a:{ id:'a', nome:'Treino A', foco:'Peito, ombro e tríceps', blocos:[
       { tipo:'AQUECIMENTO', series:0, ex:[ AQ_SUP ] },
       { tipo:'BI-SET', series:3, ex:[
-        { id:'flexao-solo', nome:'Flexão no solo', reps:'15', peso:false, video:null, dica:'' },
-        { id:'elevacao-lateral', nome:'Elevação lateral', reps:'15', peso:true, video:null, dica:'' } ]},
+        { id:'flexao-solo', nome:'Flexão no solo', reps:'15', peso:false, video:'lkvSelJ0tQ8', dica:'' },
+        { id:'elevacao-lateral', nome:'Elevação lateral', reps:'15', peso:true, video:'jannLx4RxKo', dica:'' } ]},
       { tipo:'BI-SET', series:3, ex:[
-        { id:'supino-reto', nome:'Supino reto com barra', reps:'15', peso:true, video:null, dica:'Banco dentro do power rack, com os pinos de segurança na altura do peito. Se preferir, faça com halteres.' },
-        { id:'elevacao-frontal', nome:'Elevação frontal', reps:'15', peso:true, video:null, dica:'' } ]},
+        { id:'supino-reto', nome:'Supino reto com barra', reps:'15', peso:true, video:'vIGvt-vgrvY', dica:'Banco dentro do power rack, com os pinos de segurança na altura do peito. Se preferir, faça com halteres.' },
+        { id:'elevacao-frontal', nome:'Elevação frontal', reps:'15', peso:true, video:'jhxLYSm_P-k', dica:'' } ]},
       { tipo:'BI-SET', series:3, ex:[
-        { id:'supino-inclinado-halteres', nome:'Supino inclinado c/ halteres', reps:'15', peso:true, video:null, dica:'' },
-        { id:'flexao-militar', nome:'Flexão militar', reps:'15', peso:false, video:null, dica:'' } ]},
+        { id:'supino-inclinado-halteres', nome:'Supino inclinado c/ halteres', reps:'15', peso:true, video:'RGeSgQmO1EU', dica:'' },
+        { id:'flexao-militar', nome:'Flexão militar', reps:'15', peso:false, video:'fZ8d5SHDabg', dica:'' } ]},
       { tipo:'BI-SET', series:3, ex:[
-        { id:'voador-polia-alta', nome:'Voador na polia alta (cross over)', reps:'15', peso:true, video:null, dica:'Polias no ponto alto, um passo à frente do cabo, cotovelos levemente flexionados.' },
-        { id:'triceps-coice-halteres', nome:'Tríceps coice c/ halteres', reps:'15', peso:true, video:null, dica:'' } ]}
+        { id:'voador-polia-alta', nome:'Voador na polia alta (cross over)', reps:'15', peso:true, video:'E3aha5zhlc0', dica:'Polias no ponto alto, um passo à frente do cabo, cotovelos levemente flexionados.' },
+        { id:'triceps-coice-halteres', nome:'Tríceps coice c/ halteres', reps:'15', peso:true, video:'dnyUwaA7Pok', dica:'' } ]}
     ]},
     b:{ id:'b', nome:'Treino B', foco:'Membros inferiores', blocos:[
       { tipo:'AQUECIMENTO', series:0, ex:[
-        { id:'mob-inferiores', nome:'Flexibilidade e mobilidade de inferiores', reps:'livre', peso:false, series:0, video:null, dica:'' },
-        { id:'agachamento-corpo', nome:'Agachamento c/ peso do corpo', reps:'15', peso:false, series:3, video:null, dica:'' } ]},
-      { tipo:'META DE REPETIÇÃO', series:3, ex:[ { id:'agachamento-goblet', nome:'Agachamento goblet com halter', reps:'15', peso:true, video:null, dica:'No lugar da cadeira extensora. Halter preso junto ao peito, desce entre os joelhos — aquece o joelho e prepara o quadríceps para o agachamento pesado.' } ]},
-      { tipo:'META DE REPETIÇÃO', series:3, ex:[ { id:'agachamento-barra', nome:'Agachamento livre com barra', reps:'15', peso:true, video:null, dica:'No lugar do leg press 45. Power rack com os pinos de segurança na altura mais baixa do agachamento — dá para falhar em segurança treinando sozinho.' } ]},
-      { tipo:'META DE REPETIÇÃO', series:3, ex:[ { id:'stiff-halteres', nome:'Stiff com halteres', reps:'15', peso:true, video:null, dica:'No lugar da mesa flexora. Joelhos quase estendidos, quadril para trás, halteres rentes à perna. Desce até o posterior alongar, sem curvar a lombar.' } ]},
-      { tipo:'META DE REPETIÇÃO', series:3, ex:[ { id:'afundo-halteres', nome:'Afundo com halteres', reps:'15/perna', peso:true, video:null, dica:'No lugar do agachamento hack. Um halter em cada mão, passo à frente, joelho de trás quase encostando no chão.' } ]},
+        { id:'mob-inferiores', nome:'Flexibilidade e mobilidade de inferiores', reps:'livre', peso:false, series:0, video:'spvFidOCpRE', dica:'' },
+        { id:'agachamento-corpo', nome:'Agachamento c/ peso do corpo', reps:'15', peso:false, series:3, video:'ajzahtQpPAg', dica:'' } ]},
+      { tipo:'META DE REPETIÇÃO', series:3, ex:[ { id:'agachamento-goblet', nome:'Agachamento goblet com halter', reps:'15', peso:true, video:'ge1vdJRP0UA', dica:'No lugar da cadeira extensora. Halter preso junto ao peito, desce entre os joelhos — aquece o joelho e prepara o quadríceps para o agachamento pesado.' } ]},
+      { tipo:'META DE REPETIÇÃO', series:3, ex:[ { id:'agachamento-barra', nome:'Agachamento livre com barra', reps:'15', peso:true, video:'6ppjJrbrW7g', dica:'No lugar do leg press 45. Power rack com os pinos de segurança na altura mais baixa do agachamento — dá para falhar em segurança treinando sozinho.' } ]},
+      { tipo:'META DE REPETIÇÃO', series:3, ex:[ { id:'stiff-halteres', nome:'Stiff com halteres', reps:'15', peso:true, video:'XlGjQYUN4RQ', dica:'No lugar da mesa flexora. Joelhos quase estendidos, quadril para trás, halteres rentes à perna. Desce até o posterior alongar, sem curvar a lombar.' } ]},
+      { tipo:'META DE REPETIÇÃO', series:3, ex:[ { id:'afundo-halteres', nome:'Afundo com halteres', reps:'15/perna', peso:true, video:'LD6dydg2bxc', dica:'No lugar do agachamento hack. Um halter em cada mão, passo à frente, joelho de trás quase encostando no chão.' } ]},
       { tipo:'BI-SET', series:3, ex:[
-        { id:'abducao-quadril-polia', nome:'Abdução de quadril na polia baixa', reps:'15/perna', peso:true, video:null, dica:'No lugar da cadeira abdutora. Tornozeleira na polia baixa, de lado para o aparelho, abre a perna de fora sem girar o tronco.' },
-        { id:'panturrilha-em-pe', nome:'Panturrilha em pé com halteres', reps:'15', peso:true, video:null, dica:'Um halter na mão, ponta do pé num degrau ou anilha para ganhar amplitude.' } ]}
+        { id:'abducao-quadril-polia', nome:'Abdução de quadril na polia baixa', reps:'15/perna', peso:true, video:'8dpez6IeZ3E', dica:'No lugar da cadeira abdutora. Tornozeleira na polia baixa, de lado para o aparelho, abre a perna de fora sem girar o tronco.' },
+        { id:'panturrilha-em-pe', nome:'Panturrilha em pé com halteres', reps:'15', peso:true, video:'taJ1LKIwwKI', dica:'Um halter na mão, ponta do pé num degrau ou anilha para ganhar amplitude.' } ]}
     ]},
     c:{ id:'c', nome:'Treino C', foco:'Costas e bíceps', blocos:[
       { tipo:'AQUECIMENTO', series:0, ex:[ AQ_SUP ] },
-      { tipo:'6 PESADA / 12 LEVE', series:3, ex:[ { id:'remada-curvada-barra', nome:'Remada curvada com barra', reps:'6 / 12', peso:true, video:null, dica:'No lugar da remada cavalinho. Barra do power rack, tronco a ~45°, puxa na direção do umbigo. Primeira parte pesada em 6 reps, depois alivia a carga e fecha 12.' } ]},
+      { tipo:'6 PESADA / 12 LEVE', series:3, ex:[ { id:'remada-curvada-barra', nome:'Remada curvada com barra', reps:'6 / 12', peso:true, video:'g_lmBmIWUs4', dica:'No lugar da remada cavalinho. Barra do power rack, tronco a ~45°, puxa na direção do umbigo. Primeira parte pesada em 6 reps, depois alivia a carga e fecha 12.' } ]},
       { tipo:'BI-SET', series:3, ex:[
-        { id:'puxada-alta', nome:'Puxada alta na polia', reps:'15', peso:true, video:null, dica:'Na polia alta do cross over. Se não houver banco com apoio de coxa, faça ajoelhado.' },
-        { id:'remada-halteres', nome:'Remada com halteres', reps:'15', peso:true, video:null, dica:'' } ]},
+        { id:'puxada-alta', nome:'Puxada alta na polia', reps:'15', peso:true, video:'7cCiQUdIXWw', dica:'Na polia alta do cross over. Se não houver banco com apoio de coxa, faça ajoelhado.' },
+        { id:'remada-halteres', nome:'Remada com halteres', reps:'15', peso:true, video:'K25eTWoEOWU', dica:'' } ]},
       { tipo:'BI-SET', series:3, ex:[
-        { id:'crucifixo-invertido-halteres', nome:'Crucifixo invertido c/ halteres', reps:'15', peso:true, video:null, dica:'' },
-        { id:'remada-baixa', nome:'Remada baixa na polia', reps:'15', peso:true, video:null, dica:'' } ]},
-      { tipo:'META DE REPETIÇÃO', series:3, ex:[ { id:'biceps-martelo', nome:'Bíceps martelo', reps:'15', peso:true, video:null, dica:'' } ]}
+        { id:'crucifixo-invertido-halteres', nome:'Crucifixo invertido c/ halteres', reps:'15', peso:true, video:'-riiVfD9Qw4', dica:'' },
+        { id:'remada-baixa', nome:'Remada baixa na polia', reps:'15', peso:true, video:'2YebbYuuBJQ', dica:'' } ]},
+      { tipo:'META DE REPETIÇÃO', series:3, ex:[ { id:'biceps-martelo', nome:'Bíceps martelo', reps:'15', peso:true, video:'xvvjkh3Aa4s', dica:'' } ]}
     ]}
   },
 
@@ -883,7 +905,11 @@ function telaTreino(id){
         <div class="lbl"><b>${esc(e.nome)}</b>${e.dica ? `<span>${esc(e.dica)}</span>` : ''}</div>
         <div class="alvo">${ns ? `${ns} × ${esc(e.reps)}` : 'livre'}</div>
       </div>`;
-      if (e.video) html += `<div class="vidslot">▶ <b>Ver demonstração</b></div>`;
+      if (e.video){
+        html += `<button type="button" class="vidslot" data-video="${esc(e.video)}" aria-expanded="false">
+          <span class="play">▶</span><b>Ver demonstração</b><span class="seta">▼</span>
+        </button><div class="vidbox" hidden></div>`;
+      }
     });
 
     if (s === 0){
@@ -937,6 +963,24 @@ function telaTreino(id){
   return html;
 }
 
+/** Player do YouTube, montado só quando o usuário pede. */
+function htmlVideo(id){
+  if (navigator.onLine === false){
+    return `<div class="semrede"><b>Sem conexão</b>A demonstração vem do YouTube e precisa de internet.
+      O resto do treino funciona normalmente offline.</div>`;
+  }
+  return `<div class="frame">
+      <iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?rel=0&amp;modestbranding=1&amp;playsinline=1"
+        title="Demonstração do exercício" loading="lazy" allowfullscreen
+        referrerpolicy="strict-origin-when-cross-origin"
+        allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen"></iframe>
+    </div>
+    <div class="rodape">
+      <span style="flex:1">Vídeo de terceiros, no YouTube</span>
+      <a href="https://www.youtube.com/watch?v=${encodeURIComponent(id)}" target="_blank" rel="noopener">abrir no YouTube ↗</a>
+    </div>`;
+}
+
 function atualizaProgresso(){
   const t = PLANO.musculacao[TR.treino];
   const total = totalSeries(t);
@@ -968,6 +1012,19 @@ function ligarTreino(){
   });
 
   app.addEventListener('click', e => {
+    // abre/fecha a demonstração — o iframe só nasce ao abrir e some ao fechar,
+    // então nenhuma requisição vai ao YouTube antes de você pedir.
+    const vid = e.target.closest('[data-video]');
+    if (vid){
+      const caixa = vid.nextElementSibling;
+      const abrir = vid.getAttribute('aria-expanded') !== 'true';
+      vid.setAttribute('aria-expanded', String(abrir));
+      caixa.hidden = !abrir;
+      caixa.innerHTML = abrir ? htmlVideo(vid.dataset.video) : '';
+      if (abrir) caixa.scrollIntoView({ block:'nearest', behavior:'smooth' });
+      return;
+    }
+
     const chk = e.target.closest('[data-set]');
     if (chk && TR){
       const key = chk.dataset.set;
