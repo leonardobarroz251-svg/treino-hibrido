@@ -223,6 +223,10 @@ h1,h2,h3,.disp{font-family:var(--font-display);font-stretch:85%;font-weight:700;
   display:block;font-size:11px;color:var(--muted);margin-top:5px;line-height:1.45;
   padding-left:8px;border-left:2px solid var(--line-2);
 }
+.exhead .lbl .exmeta{
+  font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);
+  font-weight:700;margin-top:4px;
+}
 .exhead .alvo{font-family:var(--font-display);font-stretch:85%;font-size:15px;font-weight:700;color:var(--acid);flex:none;font-variant-numeric:tabular-nums}
 .exhead + .exhead{border-top:0}
 .biset-link{display:flex;align-items:center;gap:8px;padding:0 13px;height:9px;position:relative}
@@ -477,59 +481,126 @@ hr.sep{border:0;border-top:1px solid var(--line);margin:22px 0}
 <script>
 "use strict";
 /* ═══════════════════════════════════════════════════════════════════
-   1. PLANO — a planilha do Time Híbrido, transcrita do PDF.
-      Cada exercício traz `video` e `dica`: preencher esses campos é o
-      único passo necessário para ligar a fase de vídeos demonstrativos.
+   1. PLANO — o plano de treino: 4 dias de musculação + cardio.
+      Cada exercício traz `descanso`, `video` e `dica`; o grupo muscular
+      é o `tipo` do bloco, que a tela imprime acima do nome.
    ═══════════════════════════════════════════════════════════════════ */
 
-const AQ_SUP = { id:'mob-superiores', nome:'Aquecimento / mobilidade pré-treino de superiores', reps:'livre', peso:false, series:0, video:'YyI_qc8c07w', dica:'' };
+/* Aquecimento e cardio repetem em mais de um dia — funções, e não constantes,
+   para que cada treino receba o seu próprio objeto em vez de uma referência
+   compartilhada (marcas e campos da sessão são por posição no bloco). */
+
+const AQ_SUP = () => ({ id:'mob-superiores', nome:'Mobilidade de ombros e coluna', reps:'5 min', peso:false, series:0, video:'YyI_qc8c07w',
+  dica:'Cinco minutos sem pressa: rotação de ombro, abertura de peitoral e giro de tronco. É para aquecer a articulação, não para cansar.' });
+
+const AQ_INF = () => ({ id:'mob-inferiores', nome:'Mobilidade de quadril e tornozelo', reps:'5 min', peso:false, series:0, video:'spvFidOCpRE',
+  dica:'Cinco minutos de mobilidade antes de carregar a perna: quadril, joelho e tornozelo soltos.' });
+
+const CARDIO = () => ({ tipo:'CARDIO', series:0, rotulo:'Concluir cardio', sub:'60 min contínuos — o player conduz o tempo e a zona',
+  ex:[ { id:'cardio-60', nome:'Cardio 60 min', reps:'60 min', peso:false, series:0, video:'',
+         dica:'Esteira, bike ou elíptico em ritmo confortável (Z2): tem que dar para conversar frases inteiras. Se a conversa ficar difícil, alivie.' } ] });
 
 const PLANO = {
   musculacao:{
-    a:{ id:'a', nome:'Treino A', foco:'Peito, ombro e tríceps', blocos:[
-      { tipo:'AQUECIMENTO', series:0, ex:[ AQ_SUP ] },
-      { tipo:'BI-SET', series:3, ex:[
-        { id:'flexao-solo', nome:'Flexão no solo', reps:'15', peso:false, video:'lkvSelJ0tQ8', dica:'' },
-        { id:'elevacao-lateral', nome:'Elevação lateral', reps:'15', peso:true, video:'jannLx4RxKo', dica:'' } ]},
-      { tipo:'BI-SET', series:3, ex:[
-        { id:'supino-reto', nome:'Supino reto com barra', reps:'15', peso:true, video:'vIGvt-vgrvY', dica:'Banco dentro do power rack, com os pinos de segurança na altura do peito. Se preferir, faça com halteres.' },
-        { id:'elevacao-frontal', nome:'Elevação frontal', reps:'15', peso:true, video:'jhxLYSm_P-k', dica:'' } ]},
-      { tipo:'BI-SET', series:3, ex:[
-        { id:'supino-inclinado-halteres', nome:'Supino inclinado c/ halteres', reps:'15', peso:true, video:'RGeSgQmO1EU', dica:'' },
-        { id:'flexao-militar', nome:'Flexão militar', reps:'15', peso:false, video:'fZ8d5SHDabg', dica:'' } ]},
-      { tipo:'BI-SET', series:3, ex:[
-        { id:'voador-polia-alta', nome:'Voador na polia alta (cross over)', reps:'15', peso:true, video:'E3aha5zhlc0', dica:'Polias no ponto alto, um passo à frente do cabo, cotovelos levemente flexionados.' },
-        { id:'triceps-coice-halteres', nome:'Tríceps coice c/ halteres', reps:'15', peso:true, video:'dnyUwaA7Pok', dica:'' } ]}
+    a:{ id:'a', nome:'Treino A', foco:'Peito e tríceps', blocos:[
+      { tipo:'AQUECIMENTO', series:0, ex:[ AQ_SUP() ] },
+      { tipo:'PEITO', series:3, ex:[
+        { id:'supino-reto-halteres', nome:'Supino reto com halteres', reps:'10–12', peso:true, descanso:'60–90s', video:'tDxKGeY-hjQ',
+          dica:'Banco reto, cotovelos a uns 45° do tronco. Desce até o halter na linha do peito e sobe sem travar o cotovelo.' } ]},
+      { tipo:'PEITO', series:3, ex:[
+        { id:'supino-inclinado-halteres', nome:'Supino inclinado com halteres', reps:'10–12', peso:true, descanso:'60–90s', video:'RGeSgQmO1EU',
+          dica:'Banco entre 30° e 45° — mais que isso o ombro assume o trabalho no lugar do peitoral.' } ]},
+      { tipo:'PEITO', series:3, ex:[
+        { id:'voador-polia-alta', nome:'Crucifixo na polia', reps:'12–15', peso:true, descanso:'60–90s', video:'E3aha5zhlc0',
+          dica:'Polias no ponto alto, um passo à frente dos cabos, cotovelos levemente flexionados o tempo todo. Fecha as mãos na frente do peito.' } ]},
+      { tipo:'TRÍCEPS', series:3, ex:[
+        { id:'triceps-corda', nome:'Tríceps corda na polia', reps:'10–12', peso:true, descanso:'60–90s', video:'JGUVRBKT0j4',
+          dica:'Cotovelos colados no tronco e parados. Só o antebraço desce; abre a corda no fim do movimento.' } ]},
+      { tipo:'TRÍCEPS', series:2, ex:[
+        { id:'triceps-frances-halter', nome:'Tríceps francês com halter', reps:'12', peso:true, descanso:'60–90s', video:'KKMoJR_9HaE',
+          dica:'Halter atrás da cabeça, cotovelos apontados para cima e sem abrir para os lados. Carga leve, movimento controlado.' } ]},
+      { tipo:'TRÍCEPS', series:2, ex:[
+        { id:'triceps-unilateral-polia', nome:'Tríceps unilateral na polia', reps:'12–15', peso:true, descanso:'60–90s', video:'ohwBK371XRQ',
+          dica:'Um braço de cada vez, cotovelo fixo na lateral do corpo. Estende até o fim e volta devagar.' } ]},
+      CARDIO()
     ]},
-    b:{ id:'b', nome:'Treino B', foco:'Membros inferiores', blocos:[
-      { tipo:'AQUECIMENTO', series:0, ex:[
-        { id:'mob-inferiores', nome:'Flexibilidade e mobilidade de inferiores', reps:'livre', peso:false, series:0, video:'spvFidOCpRE', dica:'' },
-        { id:'agachamento-corpo', nome:'Agachamento c/ peso do corpo', reps:'15', peso:false, series:3, video:'ajzahtQpPAg', dica:'' } ]},
-      { tipo:'META DE REPETIÇÃO', series:3, ex:[ { id:'agachamento-goblet', nome:'Agachamento goblet com halter', reps:'15', peso:true, video:'ge1vdJRP0UA', dica:'No lugar da cadeira extensora. Halter preso junto ao peito, desce entre os joelhos — aquece o joelho e prepara o quadríceps para o agachamento pesado.' } ]},
-      { tipo:'META DE REPETIÇÃO', series:3, ex:[ { id:'agachamento-barra', nome:'Agachamento livre com barra', reps:'15', peso:true, video:'6ppjJrbrW7g', dica:'No lugar do leg press 45. Power rack com os pinos de segurança na altura mais baixa do agachamento — dá para falhar em segurança treinando sozinho.' } ]},
-      { tipo:'META DE REPETIÇÃO', series:3, ex:[ { id:'stiff-halteres', nome:'Stiff com halteres', reps:'15', peso:true, video:'XlGjQYUN4RQ', dica:'No lugar da mesa flexora. Joelhos quase estendidos, quadril para trás, halteres rentes à perna. Desce até o posterior alongar, sem curvar a lombar.' } ]},
-      { tipo:'META DE REPETIÇÃO', series:3, ex:[ { id:'afundo-halteres', nome:'Afundo com halteres', reps:'15/perna', peso:true, video:'LD6dydg2bxc', dica:'No lugar do agachamento hack. Um halter em cada mão, passo à frente, joelho de trás quase encostando no chão.' } ]},
-      { tipo:'BI-SET', series:3, ex:[
-        { id:'abducao-quadril-polia', nome:'Abdução de quadril na polia baixa', reps:'15/perna', peso:true, video:'8dpez6IeZ3E', dica:'No lugar da cadeira abdutora. Tornozeleira na polia baixa, de lado para o aparelho, abre a perna de fora sem girar o tronco.' },
-        { id:'panturrilha-em-pe', nome:'Panturrilha em pé com halteres', reps:'15', peso:true, video:'taJ1LKIwwKI', dica:'Um halter na mão, ponta do pé num degrau ou anilha para ganhar amplitude.' } ]}
+
+    b:{ id:'b', nome:'Treino B', foco:'Costas e bíceps', blocos:[
+      { tipo:'AQUECIMENTO', series:0, ex:[ AQ_SUP() ] },
+      { tipo:'COSTAS', series:3, ex:[
+        { id:'puxada-alta', nome:'Puxada alta na polia', reps:'10–12', peso:true, descanso:'60–90s', video:'7cCiQUdIXWw',
+          dica:'Puxa a barra até a linha da clavícula levando o cotovelo para baixo, peito aberto. Sem jogar o tronco para trás.' } ]},
+      { tipo:'COSTAS', series:3, ex:[
+        { id:'remada-baixa', nome:'Remada baixa na polia', reps:'10–12', peso:true, descanso:'60–90s', video:'2YebbYuuBJQ',
+          dica:'Tronco firme e parado, puxa na direção do umbigo juntando as escápulas. A lombar não balança.' } ]},
+      { tipo:'COSTAS', series:3, ex:[
+        { id:'remada-halteres', nome:'Remada unilateral com halter', reps:'10–12', peso:true, descanso:'60–90s', video:'K25eTWoEOWU',
+          dica:'Joelho e mão apoiados no banco, coluna neutra. Puxa o halter rente ao corpo até a cintura, sem girar o tronco.' } ]},
+      { tipo:'COSTAS', series:2, ex:[
+        { id:'pullover-polia', nome:'Pullover na polia', reps:'12–15', peso:true, descanso:'60–90s', video:'F8SukAvJv-Q',
+          dica:'De frente para a polia alta, braços quase estendidos. Desce a barra até a coxa só girando o ombro — o cotovelo não flexiona.' } ]},
+      { tipo:'BÍCEPS', series:3, ex:[
+        { id:'rosca-direta-polia', nome:'Rosca direta na polia', reps:'10–12', peso:true, descanso:'60–90s', video:'xkmg-Qy0adI',
+          dica:'Polia baixa, cotovelos junto ao corpo. Sobe sem balançar o tronco e desce controlando até esticar.' } ]},
+      { tipo:'BÍCEPS', series:3, ex:[
+        { id:'biceps-martelo', nome:'Rosca martelo com halteres', reps:'10–12', peso:true, descanso:'60–90s', video:'xvvjkh3Aa4s',
+          dica:'Pegada neutra, polegar para cima, cotovelo parado. Sem impulso de ombro.' } ]},
+      CARDIO()
     ]},
-    c:{ id:'c', nome:'Treino C', foco:'Costas e bíceps', blocos:[
-      { tipo:'AQUECIMENTO', series:0, ex:[ AQ_SUP ] },
-      { tipo:'6 PESADA / 12 LEVE', series:3, ex:[ { id:'remada-curvada-barra', nome:'Remada curvada com barra', reps:'6 / 12', peso:true, video:'g_lmBmIWUs4', dica:'No lugar da remada cavalinho. Barra do power rack, tronco a ~45°, puxa na direção do umbigo. Primeira parte pesada em 6 reps, depois alivia a carga e fecha 12.' } ]},
-      { tipo:'BI-SET', series:3, ex:[
-        { id:'puxada-alta', nome:'Puxada alta na polia', reps:'15', peso:true, video:'7cCiQUdIXWw', dica:'Na polia alta do cross over. Se não houver banco com apoio de coxa, faça ajoelhado.' },
-        { id:'remada-halteres', nome:'Remada com halteres', reps:'15', peso:true, video:'K25eTWoEOWU', dica:'' } ]},
-      { tipo:'BI-SET', series:3, ex:[
-        { id:'crucifixo-invertido-halteres', nome:'Crucifixo invertido c/ halteres', reps:'15', peso:true, video:'-riiVfD9Qw4', dica:'' },
-        { id:'remada-baixa', nome:'Remada baixa na polia', reps:'15', peso:true, video:'2YebbYuuBJQ', dica:'' } ]},
-      { tipo:'META DE REPETIÇÃO', series:3, ex:[ { id:'biceps-martelo', nome:'Bíceps martelo', reps:'15', peso:true, video:'xvvjkh3Aa4s', dica:'' } ]}
+
+    c:{ id:'c', nome:'Treino C', foco:'Pernas e abdômen', blocos:[
+      { tipo:'AQUECIMENTO', series:0, ex:[ AQ_INF() ] },
+      { tipo:'PERNAS', series:3, ex:[
+        { id:'agachamento-goblet', nome:'Agachamento goblet', reps:'10–12', peso:true, descanso:'60–90s', video:'ge1vdJRP0UA',
+          dica:'Halter preso junto ao peito, peso no meio do pé. Desce entre os joelhos mantendo o tronco ereto.' } ]},
+      { tipo:'PERNAS', series:3, ex:[
+        { id:'agachamento-smith', nome:'Agachamento no Smith', reps:'10–12', peso:true, descanso:'60–90s', video:'uCT5wfQIQpk',
+          dica:'Pés um pouco à frente da barra, joelhos acompanhando a ponta do pé. Desce até a coxa perto da paralela.' } ]},
+      { tipo:'PERNAS', series:3, ex:[
+        { id:'afundo-halteres', nome:'Afundo com halteres', reps:'10/perna', peso:true, descanso:'60–90s', video:'LD6dydg2bxc',
+          dica:'Um halter em cada mão, passo à frente, joelho de trás quase encostando no chão. Tronco na vertical.' } ]},
+      { tipo:'PANTURRILHA', series:3, ex:[
+        { id:'panturrilha-em-pe', nome:'Elevação de panturrilha em pé', reps:'15–20', peso:true, descanso:'60–90s', video:'taJ1LKIwwKI',
+          dica:'Ponta do pé num degrau ou anilha para ganhar amplitude. Sobe até o topo e desce até alongar.' } ]},
+      { tipo:'ABDÔMEN', series:3, ex:[
+        { id:'abdominal-polia', nome:'Abdominal na polia', reps:'12–15', peso:true, descanso:'60–90s', video:'I64bjVbs7XI',
+          dica:'Ajoelhado de costas para a polia alta, corda junto à cabeça. Enrola a coluna trazendo as costelas ao quadril — o quadril fica parado.' } ]},
+      { tipo:'ABDÔMEN', series:3, ex:[
+        { id:'elevacao-pernas', nome:'Elevação de pernas', reps:'10–15', peso:false, descanso:'60–90s', video:'IIMzCZXqIeA',
+          dica:'Deitado, mãos sob o quadril e lombar colada no chão. Sobe as pernas e desce sem deixar a lombar arquear.' } ]},
+      CARDIO()
+    ]},
+
+    d:{ id:'d', nome:'Treino D', foco:'Ombros e complementar', blocos:[
+      { tipo:'AQUECIMENTO', series:0, ex:[ AQ_SUP() ] },
+      { tipo:'OMBROS', series:3, ex:[
+        { id:'desenvolvimento-halteres', nome:'Desenvolvimento com halteres', reps:'10–12', peso:true, descanso:'60–90s', video:'0uB7PH3oFVo',
+          dica:'Sentado no banco com encosto quase na vertical. Sobe até quase esticar o cotovelo, sem arquear a lombar.' } ]},
+      { tipo:'OMBROS', series:3, ex:[
+        { id:'elevacao-lateral', nome:'Elevação lateral', reps:'12–15', peso:true, descanso:'60–90s', video:'jannLx4RxKo',
+          dica:'Sobe até a altura do ombro, não mais. Carga leve — se precisar dar impulso, está pesado.' } ]},
+      { tipo:'OMBROS', series:3, ex:[
+        { id:'crucifixo-invertido-halteres', nome:'Crucifixo inverso com halteres', reps:'12–15', peso:true, descanso:'60–90s', video:'-riiVfD9Qw4',
+          dica:'Tronco inclinado à frente, cotovelos levemente flexionados. Abre os braços juntando as escápulas.' } ]},
+      { tipo:'PEITO', series:2, ex:[
+        { id:'supino-inclinado-halteres', nome:'Supino inclinado com halteres', reps:'10–12', peso:true, descanso:'60–90s', video:'RGeSgQmO1EU',
+          dica:'Complemento leve do peito na semana — use uma carga confortável, sem buscar a falha.' } ]},
+      { tipo:'COSTAS', series:2, ex:[
+        { id:'puxada-alta', nome:'Puxada alta na polia', reps:'10–12', peso:true, descanso:'60–90s', video:'7cCiQUdIXWw',
+          dica:'Complemento de costas: cotovelo para baixo, peito aberto, sem jogar o tronco.' } ]},
+      { tipo:'BÍCEPS', series:2, ex:[
+        { id:'biceps-martelo', nome:'Rosca martelo com halteres', reps:'12', peso:true, descanso:'60–90s', video:'xvvjkh3Aa4s',
+          dica:'Pegada neutra, cotovelo parado junto ao corpo.' } ]},
+      { tipo:'TRÍCEPS', series:2, ex:[
+        { id:'triceps-corda', nome:'Tríceps corda na polia', reps:'12', peso:true, descanso:'60–90s', video:'JGUVRBKT0j4',
+          dica:'Fecha o treino com o tríceps: cotovelos colados, abre a corda no fim.' } ]},
+      CARDIO()
     ]}
   },
 
   corrida:{
-    ter:{ id:'ter', nome:'Intervalado 1:1', intensidade:'Moderado', tiros:14, esforco:60,  recup:60, aquec:300, desaquec:300 },
-    qui:{ id:'qui', nome:'Intervalado 2:1', intensidade:'Moderado', tiros:10, esforco:120, recup:60, aquec:300, desaquec:300 },
-    sab:{ id:'sab', nome:'Intervalado 3:1', intensidade:'Moderado', tiros:7,  esforco:180, recup:60, aquec:300, desaquec:300 }
+    cardio:{ id:'cardio', nome:'Cardio contínuo', intensidade:'Leve a moderado', continuo:true,
+             tiros:0, esforco:3000, recup:0, aquec:300, desaquec:300 }
   },
 
   /* Tabela de zonas — página 8 do PDF */
@@ -558,14 +629,32 @@ const KEY = 'th:v1';
 const PADRAO = () => ({
   v: 1,
   perfil: {
-    nome: 'Leonardo', idade: 24, descanso: 60, som: true, vibrar: true,
+    nome: 'Leonardo', idade: 24, descanso: 75, som: true, vibrar: true,
     // 0=dom … 6=sáb
-    dias: { 0:null, 1:'m:a', 2:'c:ter', 3:'m:b', 4:'c:qui', 5:'m:c', 6:'c:sab' }
+    dias: { 0:null, 1:'m:a', 2:'m:b', 3:'c:cardio', 4:'m:c', 5:'m:d', 6:'c:cardio' }
   },
   sessoes: [],
   cargas: {},
   andamento: null
 });
+
+/** Versão do PLANO. Subir força a agenda de volta ao padrão e descarta um
+    treino em andamento, cujas marcas são por posição de bloco. */
+const PLANO_V = 2;
+
+/** Aplica o padrão por cima do que veio do disco e migra o plano trocado.
+    `sessoes` e `cargas` são sempre preservados. */
+function migrar(p){
+  const d = Object.assign(PADRAO(), p);
+  d.perfil = Object.assign(PADRAO().perfil, p.perfil || {});
+  d.perfil.dias = Object.assign(PADRAO().perfil.dias, (p.perfil || {}).dias || {});
+  if (d.plano !== PLANO_V){
+    d.perfil.dias = PADRAO().perfil.dias;
+    d.andamento = null;
+    d.plano = PLANO_V;
+  }
+  return d;
+}
 
 const DB = {
   data: PADRAO(),
@@ -573,12 +662,7 @@ const DB = {
   load(){
     try {
       const raw = localStorage.getItem(KEY);
-      if (raw) {
-        const p = JSON.parse(raw);
-        this.data = Object.assign(PADRAO(), p);
-        this.data.perfil = Object.assign(PADRAO().perfil, p.perfil || {});
-        this.data.perfil.dias = Object.assign(PADRAO().perfil.dias, (p.perfil||{}).dias || {});
-      }
+      if (raw) this.data = migrar(JSON.parse(raw));
       localStorage.setItem(KEY + ':probe', '1');
       localStorage.removeItem(KEY + ':probe');
     } catch (e) { this.ok = false; }
@@ -619,7 +703,7 @@ function bpm(z){
   return `${Math.round(f*Z.min/100)}–${Math.round(f*Z.max/100)}`;
 }
 
-/** Resolve o código de agenda ('m:a' | 'c:ter') no treino correspondente. */
+/** Resolve o código de agenda ('m:a' | 'c:cardio') no treino correspondente. */
 function treinoDoCodigo(cod){
   if (!cod) return null;
   const [k, id] = cod.split(':');
@@ -641,10 +725,11 @@ function seriesDoBloco(b){
 }
 function seriesDoEx(b, e){ return e.series === undefined ? b.series : e.series; }
 
-/** Fases do intervalado, em ordem. */
+/** Fases da sessão de cardio, em ordem — contínua ou intervalada. */
 function fasesCorrida(c){
   const f = [{ tipo:'AQUECIMENTO', dur:c.aquec, zona:'Z1' }];
-  for (let i = 1; i <= c.tiros; i++){
+  if (c.continuo) f.push({ tipo:'CONTÍNUO', dur:c.esforco, zona:'Z2' });
+  else for (let i = 1; i <= c.tiros; i++){
     f.push({ tipo:'ESFORÇO',     dur:c.esforco, zona:'Z3', tiro:i });
     f.push({ tipo:'RECUPERAÇÃO', dur:c.recup,   zona:'Z1', tiro:i });
   }
@@ -779,7 +864,7 @@ function telaSemana(){
 
   html += `
   <header class="hero rise" style="--i:0">
-    <div class="eyebrow">Desafio Atleta Híbrido · Iniciante 2 · 5 km</div>
+    <div class="eyebrow">Emagrecimento · musculação 4x + cardio</div>
     <h1>Olá,<br><em>${esc((p.nome || '').split(' ')[0] || 'Atleta')}</em></h1>
   </header>
 
@@ -799,19 +884,24 @@ function telaSemana(){
     html += `
     <div class="today rise" style="--i:3">
       <div class="row" style="position:relative">
-        <span class="chip ${corrida ? 'run' : 'acid'}">${corrida ? 'Corrida' : 'Musculação'}</span>
+        <span class="chip ${corrida ? 'run' : 'acid'}">${corrida ? 'Cardio' : 'Musculação'}</span>
         ${hojeItem.feito ? '<span class="chip acid">✓ Concluído</span>' : ''}
         ${retomar ? '<span class="chip">Em andamento</span>' : ''}
       </div>
       <h2>${esc(corrida ? o.nome : o.nome + ' · ' + o.foco)}</h2>
-      <div class="sub">${esc(corrida ? o.intensidade + ' · meta 5 km' : 'Academia · 3x por semana')}</div>
+      <div class="sub">${esc(corrida ? o.intensidade + ' · ' + dur(duracaoCorrida(o)) : 'Academia · musculação + 60 min de cardio')}</div>
       <dl class="meta">
-        ${corrida ? `
+        ${corrida ? (o.continuo ? `
+          <div><dt>Formato</dt><dd>Contínuo</dd></div>
+          <div><dt>Zona</dt><dd>Z2</dd></div>
+          <div><dt>Alvo</dt><dd>${bpm('Z2')}</dd></div>
+          <div><dt>Duração</dt><dd>${dur(duracaoCorrida(o))}</dd></div>
+        ` : `
           <div><dt>Tiros</dt><dd>${o.tiros}x</dd></div>
           <div><dt>Esforço</dt><dd>${mmss(o.esforco)}</dd></div>
           <div><dt>Recuperação</dt><dd>${mmss(o.recup)}</dd></div>
           <div><dt>Duração</dt><dd>${dur(duracaoCorrida(o))}</dd></div>
-        ` : `
+        `) : `
           <div><dt>Blocos</dt><dd>${o.blocos.length}</dd></div>
           <div><dt>Séries</dt><dd>${totalSeries(o)}</dd></div>
           <div><dt>Exercícios</dt><dd>${o.blocos.reduce((a,b)=>a+b.ex.length,0)}</dd></div>
@@ -840,7 +930,8 @@ function telaSemana(){
       <div class="dd"><u>${x.d.getDate()}</u><s>${DIAS_CURTO[x.d.getDay()]}</s></div>
       <div class="info">
         <b>${esc(corrida ? o.nome : o.nome + ' · ' + o.foco)}</b>
-        <span>${esc(corrida ? `${o.tiros} tiros · ${dur(duracaoCorrida(o))}` : `${o.blocos.length} blocos · ${totalSeries(o)} séries`)}</span>
+        <span>${esc(corrida ? (o.continuo ? `Zona 2 · ${dur(duracaoCorrida(o))}` : `${o.tiros} tiros · ${dur(duracaoCorrida(o))}`)
+                             : `${o.blocos.length} blocos · ${totalSeries(o)} séries`)}</span>
       </div>
       <div class="tick ${x.feito ? 'done' : ''}">✓</div>
     </a>`;
@@ -902,8 +993,8 @@ function telaTreino(id){
       const ns = seriesDoEx(b, e);
       html += `<div class="exhead">
         ${b.ex.length > 1 ? `<span class="gi">${ei+1}</span>` : ''}
-        <div class="lbl"><b>${esc(e.nome)}</b>${e.dica ? `<span>${esc(e.dica)}</span>` : ''}</div>
-        <div class="alvo">${ns ? `${ns} × ${esc(e.reps)}` : 'livre'}</div>
+        <div class="lbl"><b>${esc(e.nome)}</b>${e.descanso ? `<span class="exmeta">Descanso ${esc(e.descanso)}</span>` : ''}${e.dica ? `<span>${esc(e.dica)}</span>` : ''}</div>
+        <div class="alvo">${ns ? `${ns} × ${esc(e.reps)}` : esc(e.reps || 'livre')}</div>
       </div>`;
       if (e.video){
         html += `<button type="button" class="vidslot" data-video="${esc(e.video)}" aria-expanded="false">
@@ -914,9 +1005,13 @@ function telaTreino(id){
 
     if (s === 0){
       const on = !!TR.marcas[`${bi}:0`];
+      const rot = b.rotulo || 'Concluir aquecimento';
+      if (b.tipo === 'CARDIO'){
+        html += `<div style="padding:10px 13px 2px"><a class="btn ghost wide sm" href="#/corrida/cardio">Abrir player de cardio →</a></div>`;
+      }
       html += `<div class="checkonly ${on ? 'done' : ''}">
-        <div class="lbl"><b>Concluir aquecimento</b><span>Sem contagem de séries — faça no seu tempo</span></div>
-        <button type="button" class="chk" data-set="${bi}:0" aria-pressed="${on}" aria-label="Concluir aquecimento">✓</button>
+        <div class="lbl"><b>${esc(rot)}</b><span>${esc(b.sub || 'Sem contagem de séries — faça no seu tempo')}</span></div>
+        <button type="button" class="chk" data-set="${bi}:0" aria-pressed="${on}" aria-label="${esc(rot)}">✓</button>
       </div>`;
     } else {
       html += `<div class="sets">`;
@@ -1153,12 +1248,12 @@ const RUN = {
     this.descartar();
     DB.data.sessoes.push({
       id:'s' + Date.now(), data:hoje(), tipo:'corrida', treino:c.id,
-      nome:`${c.nome} · ${c.tiros} tiros`, series:[],
+      nome:`${c.nome} · ${c.continuo ? dur(duracaoCorrida(c)) : c.tiros + ' tiros'}`, series:[],
       duracao: this.inicio ? Math.round((Date.now() - this.inicio) / 1000) : duracaoCorrida(c)
     });
     DB.save();
     AUDIO.seq(4, 820); AUDIO.buzz([200,100,200,100,400]);
-    alert('Treino de corrida concluído. Bom trabalho.');
+    alert('Cardio concluído. Bom trabalho.');
     location.hash = '#/';
   },
 
@@ -1174,7 +1269,9 @@ const RUN = {
 
     $('#rClock').textContent = mmss(seg);
     $('#rFase').textContent  = f.tipo;
-    $('#rTiro').textContent  = f.tiro ? `Tiro ${f.tiro} de ${this.cfg.tiros}` : (this.i === 0 ? 'Antes de começar' : 'Para fechar');
+    $('#rTiro').textContent  = f.tiro ? `Tiro ${f.tiro} de ${this.cfg.tiros}`
+      : this.i === 0 ? 'Antes de começar'
+      : this.i === this.fases.length - 1 ? 'Para fechar' : 'Bloco principal';
 
     const C = 2 * Math.PI * 46;
     $('#rPrg').setAttribute('stroke-dasharray', `${C * (seg / f.dur)} ${C}`);
@@ -1221,9 +1318,9 @@ function telaCorrida(id){
       <a class="iconbtn" href="#/" aria-label="Voltar">←</a>
       <div style="flex:1;min-width:0">
         <div class="t">${esc(c.nome)}</div>
-        <div class="s">${c.tiros} tiros · ${esc(c.intensidade)} · ${dur(duracaoCorrida(c))}</div>
+        <div class="s">${c.continuo ? 'Contínuo' : c.tiros + ' tiros'} · ${esc(c.intensidade)} · ${dur(duracaoCorrida(c))}</div>
       </div>
-      <span class="chip run">Corrida</span>
+      <span class="chip run">Cardio</span>
     </div>
   </div>
 
@@ -1264,12 +1361,14 @@ function telaCorrida(id){
   <div class="sec eyebrow">Estrutura da sessão</div>
   <div class="card">
     <div class="sess"><div class="dt"><b>1</b>fase</div><div class="info"><b>Aquecimento</b><span>${mmss(c.aquec)} contínuo em Z1</span></div></div>
-    <div class="sess"><div class="dt"><b>${c.tiros}</b>tiros</div><div class="info"><b>Bloco principal</b><span>${mmss(c.esforco)} em Z3 + ${mmss(c.recup)} em Z1, repetindo</span></div></div>
+    ${c.continuo
+      ? `<div class="sess"><div class="dt"><b>1</b>fase</div><div class="info"><b>Bloco principal</b><span>${mmss(c.esforco)} contínuos em Z2 · ${bpm('Z2')} bpm</span></div></div>`
+      : `<div class="sess"><div class="dt"><b>${c.tiros}</b>tiros</div><div class="info"><b>Bloco principal</b><span>${mmss(c.esforco)} em Z3 + ${mmss(c.recup)} em Z1, repetindo</span></div></div>`}
     <div class="sess"><div class="dt"><b>1</b>fase</div><div class="info"><b>Desaquecimento</b><span>${mmss(c.desaquec)} contínuo em Z1</span></div></div>
   </div>
   <p style="font-size:11.5px;color:var(--dim);margin-top:12px;line-height:1.5">
     Sem frequencímetro, use os sinais do corpo: em <b style="color:var(--muted)">Z1</b> dá pra conversar normalmente;
-    em <b style="color:var(--acid)">Z3</b> a respiração acelera e a conversa fica difícil.
+    em <b style="color:var(--acid)">Z2</b> a conversa continua possível, mas em frases mais curtas. Se ficar ofegante, alivie o ritmo.
   </p>`;
 }
 
@@ -1326,6 +1425,8 @@ function telaHistorico(){
     S.filter(s => s.tipo === 'musculacao').flatMap(s => (s.series || []).filter(r => r.kg > 0).map(r => r.exId))
   ));
   const opcoes = usados.length ? usados : comCarga;
+  const nomeHistorico = {};
+  S.forEach(x => (x.series || []).forEach(r => { if (r.exNome) nomeHistorico[r.exId] = r.exNome; }));
   if (!exGrafico || !opcoes.includes(exGrafico)) exGrafico = opcoes[0] || null;
 
   html += `<div class="sec eyebrow rise" style="--i:4">Evolução de carga</div>`;
@@ -1335,7 +1436,7 @@ function telaHistorico(){
     html += `<div class="card rise" style="--i:5">
       <div style="padding:12px 13px;border-bottom:1px solid var(--line)">
         <select class="sel" id="selEx" aria-label="Escolher exercício">${opcoes.map(id =>
-          `<option value="${id}" ${id === exGrafico ? 'selected' : ''}>${esc((EX_INDEX[id] || {}).nome || id)}</option>`).join('')}</select>
+          `<option value="${id}" ${id === exGrafico ? 'selected' : ''}>${esc((EX_INDEX[id] || {}).nome || nomeHistorico[id] || id)}</option>`).join('')}</select>
       </div>
       <div style="padding:12px 6px 6px" id="chartBox">${grafico(exGrafico, S)}</div>
     </div>`;
@@ -1352,7 +1453,7 @@ function telaHistorico(){
       return `<div class="sess">
         <div class="dt"><b>${d.getDate()}</b>${DIAS_CURTO[d.getDay()].toLowerCase()}</div>
         <div class="info"><b>${esc(s.nome)}</b><span>${dur(s.duracao || 0)}${vol ? ` · ${vol.toLocaleString('pt-BR')} kg de volume` : ''}${(s.series||[]).length ? ` · ${s.series.length} séries` : ''}</span></div>
-        <span class="chip ${s.tipo === 'corrida' ? 'run' : 'acid'}">${s.tipo === 'corrida' ? 'Corrida' : 'Musc.'}</span>
+        <span class="chip ${s.tipo === 'corrida' ? 'run' : 'acid'}">${s.tipo === 'corrida' ? 'Cardio' : 'Musc.'}</span>
       </div>`;
     }).join('') + `</div>`;
   }
@@ -1413,13 +1514,12 @@ function grafico(exId, S){
    ═══════════════════════════════════════════════════════════════════ */
 
 const OPCOES_DIA = [
-  ['',       'Descanso'],
-  ['m:a',    'Treino A · Peito, ombro e tríceps'],
-  ['m:b',    'Treino B · Membros inferiores'],
-  ['m:c',    'Treino C · Costas e bíceps'],
-  ['c:ter',  'Corrida · Intervalado 1:1'],
-  ['c:qui',  'Corrida · Intervalado 2:1'],
-  ['c:sab',  'Corrida · Intervalado 3:1']
+  ['',        'Descanso'],
+  ['m:a',     'Treino A · Peito e tríceps'],
+  ['m:b',     'Treino B · Costas e bíceps'],
+  ['m:c',     'Treino C · Pernas e abdômen'],
+  ['m:d',     'Treino D · Ombros e complementar'],
+  ['c:cardio','Cardio · 60 min contínuos']
 ];
 
 function telaAjustes(){
@@ -1448,7 +1548,7 @@ function telaAjustes(){
   <div class="sec eyebrow rise" style="--i:3">Treino</div>
   <div class="card rise" style="--i:4">
     <div style="padding:14px 13px 4px">
-      <div class="field"><label>Descanso padrão entre séries</label>
+      <div class="field"><label>Descanso padrão entre séries · o plano pede 60–90s</label>
         <input class="inp" id="ajDescanso" inputmode="numeric" value="${p.descanso}">
       </div>
     </div>
@@ -1484,7 +1584,7 @@ function telaAjustes(){
 
   <hr class="sep">
   <p style="font-size:11px;color:var(--dim);line-height:1.6;text-align:center">
-    Planilha <b>Desafio Atleta Híbrido</b> · Time Híbrido · CREF-SC 025279.<br>
+    Plano de emagrecimento · musculação 4x + cardio · CREF-SC 025279.<br>
     Conteúdo informativo — não substitui acompanhamento presencial.
   </p>`;
 }
@@ -1542,9 +1642,7 @@ function ligarAjustes(){
       try {
         const p = JSON.parse(fr.result);
         if (!p || !Array.isArray(p.sessoes)) throw new Error('formato');
-        DB.data = Object.assign(PADRAO(), p);
-        DB.data.perfil = Object.assign(PADRAO().perfil, p.perfil || {});
-        DB.data.perfil.dias = Object.assign(PADRAO().perfil.dias, (p.perfil||{}).dias || {});
+        DB.data = migrar(p);
         DB.save(); render();
         alert('Backup restaurado.');
       } catch (x) { alert('Arquivo inválido.'); }

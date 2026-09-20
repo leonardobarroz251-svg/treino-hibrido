@@ -1,17 +1,33 @@
 # Time Híbrido
 
-App pessoal de treino, feito a partir da planilha **Desafio Atleta Híbrido** — corrida 3x
-e musculação 3x por semana.
+App pessoal de treino. Objetivo **emagrecimento**: musculação 4x por semana + 60 min de
+cardio em cinco dias, em intensidade leve a moderada.
 
 **App:** https://leonardobarroz251-svg.github.io/treino-hibrido/
+
+## A semana
+
+| Dia | Treino |
+|---|---|
+| Segunda | A · Peito e tríceps + cardio |
+| Terça | B · Costas e bíceps + cardio |
+| Quarta | Cardio 60 min |
+| Quinta | C · Pernas e abdômen + cardio |
+| Sexta | D · Ombros e complementar + cardio |
+| Sábado | Cardio 60 min |
+| Domingo | Descanso |
+
+Equipamento: estação de polia/crossover, halteres, banco regulável, Smith e peso do corpo.
 
 ## O que faz
 
 - **Semana** — o treino de hoje, progresso da semana e sequência de semanas treinadas.
-- **Musculação (A / B / C)** — blocos e bi-sets, registro de carga e repetições por série,
-  timer de descanso automático. Lembra a última carga de cada exercício.
-- **Corrida** — player que conduz o intervalado (aquecimento, tiros, recuperação,
-  desaquecimento) com apito, vibração e a zona-alvo em bpm.
+- **Musculação (A / B / C / D)** — cada exercício mostra grupo muscular, séries e
+  repetições, descanso, vídeo e uma dica de execução. Registro de carga e repetições por
+  série, timer de descanso automático e memória da última carga de cada exercício. Cada
+  dia fecha com o bloco de cardio.
+- **Cardio** — player de 60 min contínuos (5 min de aquecimento em Z1, 50 min em Z2 e
+  5 min de desaquecimento) com apito, vibração e a zona-alvo em bpm.
 - **Progresso** — histórico, mapa de constância e evolução de carga por exercício.
 
 ## Como funciona
@@ -34,11 +50,17 @@ Para juntar, exporte de um e importe no outro.
 
 ## Mexer no plano
 
-O objeto `PLANO`, no topo do `<script>` em `index.html`, é a fonte da verdade: dias de
-corrida, blocos de musculação, séries e repetições. Cada exercício tem os campos `video`
-e `dica` — preencher `video` liga a demonstração na tela, sem precisar mexer na interface.
+O objeto `PLANO`, no topo do `<script>` em `index.html`, é a fonte da verdade. Cada
+bloco tem um `tipo` — o grupo muscular, que aparece acima do nome do exercício — e cada
+exercício tem `reps`, `descanso`, `video` (id do YouTube) e `dica`.
 
-Ao publicar uma versão nova, suba o `VERSAO` em `sw.js` para invalidar o cache antigo.
+Trocar o `id` de um exercício zera a memória de carga dele, porque `cargas` e o gráfico
+de evolução são indexados por esse id. O histórico já gravado não se perde: cada série
+guarda também o nome do exercício.
+
+Ao mudar a estrutura dos treinos, suba `PLANO_V` — isso devolve a agenda ao padrão e
+descarta um treino em andamento, cujas marcas são por posição de bloco. E suba o
+`VERSAO` em `sw.js` para invalidar o cache antigo.
 
 ---
 
